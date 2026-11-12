@@ -1,0 +1,106 @@
+# RexRanks messages. MiniMessage, legacy & codes, and &#RRGGBB hex are all accepted.
+# Placeholders use {name} (and %name% is also recognised).
+# %prefix% is always replaced with the prefix below.
+
+prefix: "&7[&6RexRanks&7] "
+
+no-permission: "%prefix%&cYou don't have permission to do that."
+player-only: "%prefix%&cThis command can only be used by players."
+player-not-found: "%prefix%&cPlayer &f{player} &cwas not found."
+group-not-found: "%prefix%&cGroup &f{group} &cdoes not exist."
+track-not-found: "%prefix%&cTrack &f{track} &cdoes not exist."
+invalid-duration: "%prefix%&cI couldn't parse that duration. Try &f1d&c, &f2h30m&c, &f7 days&c."
+usage: "%prefix%&cUsage: &f{usage}"
+saved: "%prefix%&aSaved."
+reloaded: "%prefix%&aConfiguration reloaded."
+reload-failed: "%prefix%&cReload failed: &f{error}"
+
+user:
+  info-header: "%prefix%&6User &f{name} &7({uuid})"
+  created: "%prefix%&aCreated user &f{name}&a."
+  permission-set: "%prefix%&aSet &f{node} &ato &f{value} &aon &f{target}&a.{extra}"
+  permission-unset: "%prefix%&aRemoved &f{node} &afrom &f{target}&a."
+  already-has: "%prefix%&c{target} already has that node."
+  parent-add: "%prefix%&aAdded &f{group} &aas a parent of &f{target}&a.{extra}"
+  parent-remove: "%prefix%&aRemoved parent &f{group} &afrom &f{target}&a."
+  primary: "%prefix%&aPrimary group of &f{target} &ais now &f{group}&a."
+  cleared: "%prefix%&aCleared all nodes from &f{target}&a."
+  cloned: "%prefix%&aCloned &f{source} &ato &f{target}&a."
+  prefix-set: "%prefix%&aPrefix of &f{target} &aset: {preview}"
+  suffix-set: "%prefix%&aSuffix of &f{target} &aset: {preview}"
+  meta-set: "%prefix%&aMeta &f{key}&a=&f{value} &aset on &f{target}&a."
+  meta-unset: "%prefix%&aRemoved meta &f{key} &afrom &f{target}&a."
+  promote: "%prefix%&aPromoted &f{name} &afrom &f{from} &ato &f{to} &aon track &f{track}&a."
+  demote: "%prefix%&aDemoted &f{name} &afrom &f{from} &ato &f{to} &aon track &f{track}&a."
+  promote-fail: "%prefix%&c{error}"
+
+group:
+  created: "%prefix%&aCreated group &f{group}&a."
+  deleted: "%prefix%&aDeleted group &f{group}&a."
+  exists: "%prefix%&cGroup &f{group} &calready exists."
+  renamed: "%prefix%&aRenamed group &f{from} &ato &f{to}&a."
+  cloned: "%prefix%&aCloned group &f{source} &ato &f{target}&a."
+  weight: "%prefix%&aWeight of &f{group} &ais now &f{weight}&a."
+  display: "%prefix%&aDisplay name of &f{group} &ais now {preview}"
+  cannot-delete-default: "%prefix%&cThe default group cannot be deleted."
+  list-header: "%prefix%&6Groups &7({count})"
+
+track:
+  created: "%prefix%&aCreated track &f{track}&a."
+  deleted: "%prefix%&aDeleted track &f{track}&a."
+  appended: "%prefix%&aAppended &f{group} &ato track &f{track}&a."
+  inserted: "%prefix%&aInserted &f{group} &aon track &f{track} &aat index &f{index}&a."
+  removed: "%prefix%&aRemoved &f{group} &afrom track &f{track}&a."
+  cleared: "%prefix%&aCleared track &f{track}&a."
+  renamed: "%prefix%&aRenamed track &f{from} &ato &f{to}&a."
+  list-header: "%prefix%&6Tracks &7({count})"
+
+editor:
+  disabled: "%prefix%&cThe web editor is disabled in config.yml."
+  link: "%prefix%&aWeb editor: &f{url}"
+  link-hover: "&7Click to open the editor.\n&7This link is tied to your session and expires in {minutes} minutes."
+  applied: "%prefix%&aApplied editor session &f{code}&a. {summary}"
+  apply-fail: "%prefix%&cCould not apply session: &f{error}"
+  no-session: "%prefix%&cNo editor session with that code is waiting."
+
+color:
+  preview-header: "%prefix%&6Colour workshop"
+  copied: "%prefix%&aCopied to your clipboard (if your client supports it). Output is also in chat."
+  invalid-hex: "%prefix%&cInvalid colour: &f{value}"
+  applied-prefix: "%prefix%&aApplied colour to the prefix of &f{target}&a: {preview}"
+  applied-suffix: "%prefix%&aApplied colour to the suffix of &f{target}&a: {preview}"
+
+check:
+  result: "%prefix%&f{name} &7/ &f{node} &7= {value} &8({origin})"
+  verbose-on: "%prefix%&aVerbose permission logging enabled."
+  verbose-off: "%prefix%&aVerbose permission logging disabled."
+  verbose-line: "%prefix%&7{name} &8hasPermission&7(&f{node}&7) = {value} &8[{origin}]"
+
+sync:
+  pushed: "%prefix%&aSync notification sent."
+  pulled: "%prefix%&aPulled {count} remote change(s)."
+  disabled: "%prefix%&cSync is disabled."
+
+import:
+  started: "%prefix%&7Importing &f{file}&7…"
+  done: "%prefix%&a{summary}"
+  fail: "%prefix%&cImport failed: &f{error}"
+
+export:
+  done: "%prefix%&aExported to &f{file}&a."
+  fail: "%prefix%&cExport failed: &f{error}"
+
+search:
+  header: "%prefix%&6Search &f{node} &7({count} hits)"
+  none: "%prefix%&cNo subjects have a node matching &f{node}&c."
+  line: "&8- &f{subject} &7{node}"
+
+info:
+  header: "%prefix%&6RexRanks &f{version}"
+  line: "&7{key}: &f{value}"
+
+expiry-extra: " &7(expires in {duration})"
+context-extra: " &7{contexts}"
+true: "&atrue"
+false: "&cfalse"
+undefined: "&8undefined"

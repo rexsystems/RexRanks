@@ -1,0 +1,86 @@
+name: RexRanks
+version: '${project.version}'
+main: me.rexsystems.rexranks.RexRanksPlugin
+api-version: 1.13
+folia-supported: true
+authors: [RexSystems]
+description: Modern permissions for Minecraft servers
+website: https://rexsystems.me
+softdepend: [Vault, PlaceholderAPI, RexChat]
+load: STARTUP
+
+commands:
+  rexranks:
+    description: Main RexRanks command
+    aliases: [rr, rank, ranks, perm, permissions]
+    permission: rexranks.use
+
+permissions:
+  rexranks.use:
+    description: Access to /rexranks (subcommands have their own nodes)
+    default: op
+  rexranks.admin:
+    description: Full admin access to every RexRanks command
+    default: op
+    children:
+      rexranks.use: true
+      rexranks.user: true
+      rexranks.group: true
+      rexranks.track: true
+      rexranks.editor: true
+      rexranks.color: true
+      rexranks.verbose: true
+      rexranks.check: true
+      rexranks.sync: true
+      rexranks.reload: true
+      rexranks.import: true
+      rexranks.export: true
+      rexranks.search: true
+      rexranks.bulkupdate: true
+      rexranks.info: true
+      rexranks.apply: true
+  rexranks.user:
+    description: Manage users
+    default: op
+  rexranks.group:
+    description: Manage groups
+    default: op
+  rexranks.track:
+    description: Manage tracks
+    default: op
+  rexranks.editor:
+    description: Open the web editor
+    default: op
+  rexranks.color:
+    description: Use the colour workshop
+    default: op
+  rexranks.verbose:
+    description: Toggle verbose permission logging
+    default: op
+  rexranks.check:
+    description: Run a permission check against a user
+    default: op
+  rexranks.sync:
+    description: Force a network sync
+    default: op
+  rexranks.reload:
+    description: Reload configuration
+    default: op
+  rexranks.import:
+    description: Import data (LuckPerms exports)
+    default: op
+  rexranks.export:
+    description: Export data
+    default: op
+  rexranks.search:
+    description: Search for a permission node
+    default: op
+  rexranks.bulkupdate:
+    description: Run bulk updates
+    default: op
+  rexranks.info:
+    description: View plugin information
+    default: op
+  rexranks.apply:
+    description: Apply a web-editor session
+    default: op

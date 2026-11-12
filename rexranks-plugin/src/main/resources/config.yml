@@ -1,0 +1,107 @@
+# RexRanks Configuration
+
+config-version: 1
+
+# Update checker
+update-checker:
+  enabled: true
+  notify-ops-on-join: false
+  permission: "rexranks.admin"
+  message: "%prefix%&fA new version of &6RexRanks &fis available: &6{latest}&7 (current: &f{current}&7)."
+
+# Name used as the "server" context and in the web editor.
+# On a network, give each backend a unique name (survival, lobby, …).
+server-name: global
+
+# Group automatically assigned to every user.
+default-group: default
+
+# When promoting or demoting along a track, also update the user's primary group.
+tracks:
+  update-primary-group: true
+
+# Storage backend. "h2" is the recommended default (fast, zero-config, file-backed).
+# Other options: yaml, sqlite, mysql, mariadb.
+storage:
+  type: h2
+  mysql:
+    host: 127.0.0.1
+    port: 3306
+    database: rexranks
+    username: rexranks
+    password: ""
+    pool-size: 8
+    # Extra JDBC parameters, e.g. useSSL=true
+    properties: ""
+
+# Cross-server synchronisation. Database polling works with mysql/mariadb (and
+# with H2/SQLite only on the same machine, which is rarely useful).
+# Redis is optional and pushes changes instantly. Plugin messaging notifies
+# other servers behind the same proxy.
+sync:
+  enabled: false
+  # database, redis, or plugin-messaging (can be combined: "database,redis")
+  method: database
+  poll-seconds: 5
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: ""
+    ssl: false
+    channel: rexranks:sync
+
+# Contexts attached to permission checks for online players.
+contexts:
+  include-world: true
+  include-server: true
+  include-dimension: false
+  include-gamemode: false
+
+# How Bukkit / Paper's own permission defaults and op status interact with RexRanks.
+bukkit:
+  # If true, server operators pass every permission check unless a node is
+  # explicitly set to false on the user or one of their groups.
+  op-has-all-permissions: true
+  # If true, permissions declared in other plugins' plugin.yml with a default
+  # of "true" or "not op" are honoured when RexRanks has no opinion.
+  apply-bukkit-defaults: true
+
+# Web editor. "integrated" serves the UI from this plugin (no extra process).
+# "remote" uploads a session to a paste backend (see the `web/` folder) and
+# gives you a link; apply the result with /rr apply <code>.
+editor:
+  enabled: true
+  mode: integrated
+  host: 0.0.0.0
+  port: 7780
+  # Public URL players/staff should open. Leave empty to derive it from
+  # `server-ip` / the bound host and the port above.
+  public-url: ""
+  token-lifetime-minutes: 120
+  # Used only when mode is "remote".
+  remote-url: "http://127.0.0.1:7781"
+  bind-localhost-hint: true
+
+# Known permission nodes offered as autocomplete in commands and the web editor,
+# on top of every node already used on this server and every node declared by
+# other plugins. Add your own here.
+known-nodes:
+  - minecraft.command.op
+  - minecraft.command.deop
+  - minecraft.command.gamemode
+  - minecraft.command.teleport
+  - minecraft.command.give
+  - bukkit.command.help
+  - essentials.fly
+  - essentials.gamemode
+  - essentials.teleport
+  - essentials.home
+  - essentials.warp
+  - essentials.kit
+  - essentials.chat.color
+  - worldedit.*
+  - worldguard.region.bypass.*
+  - luckperms.*
+  - rexranks.*
+  - vault.admin
+  - "*"
