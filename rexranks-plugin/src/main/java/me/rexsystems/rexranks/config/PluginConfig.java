@@ -80,6 +80,12 @@ public final class PluginConfig {
     public String editorRemoteUrl() { return config.getString("editor.remote-url", "http://127.0.0.1:7781"); }
 
     public boolean updateChecker() { return config.getBoolean("update-checker.enabled", true); }
+    public boolean updateNotifyOps() { return config.getBoolean("update-checker.notify-ops-on-join", false); }
+    public String updateNotifyPermission() { return config.getString("update-checker.permission", "rexranks.admin"); }
+    public String updateNotifyMessage() {
+        return config.getString("update-checker.message",
+                "%prefix%&fA new version of &6RexRanks &fis available: &6{latest}&7 (current: &f{current}&7).");
+    }
 
     public List<String> knownNodes() {
         return config.getStringList("known-nodes").stream().filter(s -> s != null && !s.isBlank()).collect(Collectors.toList());

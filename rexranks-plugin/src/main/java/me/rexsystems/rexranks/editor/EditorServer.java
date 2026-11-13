@@ -114,7 +114,12 @@ public final class EditorServer {
                 JsonObject proposed = gson.fromJson(body, JsonObject.class);
                 session.pendingApply = proposed;
                 session.lastDiff = service.payload().diff(proposed);
-                String summary = service.applyProposed(proposed);
+                String summary;
+                try {
+                    summary = service.applyProposed(proposed);
+                } catch (Exception e) {
+                    throw new IOException("Failed to apply editor payload", e);
+                }
                 response = new JsonObject();
                 response.addProperty("ok", true);
                 response.addProperty("summary", summary);

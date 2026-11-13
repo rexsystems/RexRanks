@@ -104,6 +104,15 @@ public final class SqlStorage implements Storage {
         return dialect.name().toLowerCase(Locale.ROOT);
     }
 
+
+    private String valueIdent() {
+        return dialect.quote("value");
+    }
+
+    private String valueSelect() {
+        return valueIdent() + " AS node_value";
+    }
+
     @Override
     public void init() throws Exception {
         try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement()) {
@@ -121,12 +130,12 @@ public final class SqlStorage implements Storage {
                         uuid VARCHAR(36) NOT NULL,
                         type VARCHAR(32) NOT NULL,
                         key_name VARCHAR(256) NOT NULL,
-                        value TEXT,
+                        %s TEXT,
                         negated %s NOT NULL,
                         expiry BIGINT NOT NULL,
                         contexts TEXT NOT NULL
                     )
-                    """.formatted(dialect.autoIncrementId(), dialect.booleanType()).stripIndent());
+                    """.formatted(dialect.autoIncrementId(), valueIdent(), dialect.booleanType()).stripIndent());
             statement.executeUpdate("""
                     CREATE TABLE IF NOT EXISTS rexranks_groups (
                         name VARCHAR(64) NOT NULL PRIMARY KEY,
@@ -139,12 +148,12 @@ public final class SqlStorage implements Storage {
                         name VARCHAR(64) NOT NULL,
                         type VARCHAR(32) NOT NULL,
                         key_name VARCHAR(256) NOT NULL,
-                        value TEXT,
+                        %s TEXT,
                         negated %s NOT NULL,
                         expiry BIGINT NOT NULL,
                         contexts TEXT NOT NULL
                     )
-                    """.formatted(dialect.autoIncrementId(), dialect.booleanType()).stripIndent());
+                    """.formatted(dialect.autoIncrementId(), valueIdent(), dialect.booleanType()).stripIndent());
             statement.executeUpdate("""
                     CREATE TABLE IF NOT EXISTS rexranks_tracks (
                         name VARCHAR(64) NOT NULL PRIMARY KEY,
@@ -247,7 +256,7 @@ public final class SqlStorage implements Storage {
     private Map<UUID, List<Node>> loadNodes(Connection connection, String table, String ownerCol, boolean uuid) throws SQLException {
         Map<UUID, List<Node>> map = new LinkedHashMap<>();
         try (Statement statement = connection.createStatement();
-             ResultSet rs = statement.executeQuery("SELECT " + ownerCol + ", type, key_name, value, negated, expiry, contexts FROM " + table)) {
+             ResultSet rs = statement.executeQuery("SELECT " + ownerCol + ", type, key_name, " + valueSelect() + ", negated, expiry, contexts FROM " + table)) {
             while (rs.next()) {
                 UUID id = UUID.fromString(rs.getString(ownerCol));
                 map.computeIfAbsent(id, k -> new ArrayList<>()).add(readNode(rs));
@@ -259,7 +268,7 @@ public final class SqlStorage implements Storage {
     private Map<String, List<Node>> loadNamedNodes(Connection connection, String table) throws SQLException {
         Map<String, List<Node>> map = new LinkedHashMap<>();
         try (Statement statement = connection.createStatement();
-             ResultSet rs = statement.executeQuery("SELECT name, type, key_name, value, negated, expiry, contexts FROM " + table)) {
+             ResultSet rs = statement.executeQuery("SELECT name, type, key_name, " + valueSelect() + ", negated, expiry, contexts FROM " + table)) {
             while (rs.next()) {
                 String name = rs.getString("name").toLowerCase(Locale.ROOT);
                 map.computeIfAbsent(name, k -> new ArrayList<>()).add(readNode(rs));
@@ -272,7 +281,7 @@ public final class SqlStorage implements Storage {
         NodeType type = NodeType.valueOf(rs.getString("type").toUpperCase(Locale.ROOT));
         boolean negated = rs.getBoolean("negated") || rs.getInt("negated") != 0;
         return Node.builder(type, rs.getString("key_name"))
-                .value(rs.getString("value"))
+                .value(rs.getString("node_value"))
                 .negated(negated)
                 .expiry(rs.getLong("expiry"))
                 .contexts(contextsFromJson(rs.getString("contexts")))
@@ -490,7 +499,7 @@ public final class SqlStorage implements Storage {
         try (Connection connection = dataSource.getConnection()) {
             Map<UUID, List<Node>> userNodes = new LinkedHashMap<>();
             try (PreparedStatement statement = connection.prepareStatement(
-                    "SELECT uuid, type, key_name, value, negated, expiry, contexts FROM rexranks_user_nodes WHERE uuid IN (SELECT uuid FROM rexranks_users WHERE updated_at > ?)")) {
+                    "SELECT uuid, type, key_name, " + valueSelect() + ", negated, expiry, contexts FROM rexranks_user_nodes WHERE uuid IN (SELECT uuid FROM rexranks_users WHERE updated_at > ?)")) {
                 statement.setLong(1, since);
                 try (ResultSet rs = statement.executeQuery()) {
                     while (rs.next()) {
@@ -515,7 +524,7 @@ public final class SqlStorage implements Storage {
             }
             Map<String, List<Node>> groupNodes = new LinkedHashMap<>();
             try (PreparedStatement statement = connection.prepareStatement(
-                    "SELECT name, type, key_name, value, negated, expiry, contexts FROM rexranks_group_nodes WHERE name IN (SELECT name FROM rexranks_groups WHERE updated_at > ?)")) {
+                    "SELECT name, type, key_name, " + valueSelect() + ", negated, expiry, contexts FROM rexranks_group_nodes WHERE name IN (SELECT name FROM rexranks_groups WHERE updated_at > ?)")) {
                 statement.setLong(1, since);
                 try (ResultSet rs = statement.executeQuery()) {
                     while (rs.next()) {
@@ -562,7 +571,7 @@ public final class SqlStorage implements Storage {
     }
 
     private void insertNodes(Connection connection, String table, String ownerCol, String owner, Collection<Node> nodes) throws SQLException {
-        String sql = "INSERT INTO " + table + " (" + ownerCol + ", type, key_name, value, negated, expiry, contexts) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO " + table + " (" + ownerCol + ", type, key_name, " + valueIdent() + ", negated, expiry, contexts) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             for (Node node : nodes) {
                 statement.setString(1, owner);

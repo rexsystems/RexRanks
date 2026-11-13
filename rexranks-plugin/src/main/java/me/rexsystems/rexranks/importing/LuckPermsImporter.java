@@ -137,7 +137,9 @@ public final class LuckPermsImporter {
                     primary = obj.get("primarygroup").getAsString();
                 }
             }
-            UserImpl user = storage.getUser(uuid).orElseGet(() -> context.newUser(uuid, username, primary));
+            String resolvedName = username;
+            String resolvedPrimary = primary;
+            UserImpl user = storage.getUser(uuid).orElseGet(() -> context.newUser(uuid, resolvedName, resolvedPrimary));
             user.setUsername(username);
             user.setPrimaryGroup(primary);
             List<Node> nodes = extractNodes(value, result);
