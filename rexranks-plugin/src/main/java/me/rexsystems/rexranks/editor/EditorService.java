@@ -133,7 +133,10 @@ public final class EditorService {
         body.addProperty("createdBy", session.createdBy);
         body.addProperty("expiresAt", session.expiresAt);
         body.addProperty("focus", session.focus);
+        body.addProperty("server", plugin.config().serverName());
+        body.addProperty("version", plugin.getPluginMeta().getVersion());
         body.add("data", payload.snapshot(session.focus));
+        body.add("knownNodes", gson.toJsonTree(plugin.knownNodes().all()));
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(remote + "/api/sessions"))
                 .header("Content-Type", "application/json")

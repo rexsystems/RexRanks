@@ -182,6 +182,31 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>build-web-editor</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipWeb}</skip>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                            <workingDirectory>${maven.multiModuleProjectDirectory}/web</workingDirectory>
+                            <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -197,6 +222,12 @@
                 <includes>
                     <include>web/**</include>
                 </includes>
+            </resource>
+
+            <resource>
+                <directory>${maven.multiModuleProjectDirectory}/web/dist</directory>
+                <targetPath>web</targetPath>
+                <filtering>false</filtering>
             </resource>
         </resources>
     </build>

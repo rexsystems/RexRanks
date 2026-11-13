@@ -1,0 +1,18 @@
+services:
+  rexranks-editor:
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+    ports:
+      - "7781:7781"
+    environment:
+      PORT: "7781"
+      PUBLIC_URL: "${PUBLIC_URL:-http://127.0.0.1:7781}"
+      DATA_DIR: /data
+      # EDITOR_SECRET: "change-me"
+    volumes:
+      - editor-data:/data
+    restart: unless-stopped
+
+volumes:
+  editor-data:

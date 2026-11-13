@@ -25,6 +25,7 @@
         <paper.version>1.21.1-R0.1-SNAPSHOT</paper.version>
         <junit.version>5.10.1</junit.version>
         <mockito.version>5.8.0</mockito.version>
+        <skipWeb>false</skipWeb>
     </properties>
 
     <licenses>

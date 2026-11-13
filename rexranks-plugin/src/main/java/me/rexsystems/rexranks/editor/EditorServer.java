@@ -101,6 +101,9 @@ public final class EditorServer {
                 response.addProperty("expiresAt", session.expiresAt);
                 response.addProperty("server", plugin.config().serverName());
                 response.addProperty("version", plugin.getPluginMeta().getVersion());
+                response.addProperty("mode", "integrated");
+                response.addProperty("applyCode", session.applyCode);
+                response.addProperty("appliesImmediately", true);
                 response.add("data", service.payload().snapshot(session.focus));
                 response.add("knownNodes", gson.toJsonTree(plugin.knownNodes().all()));
             }

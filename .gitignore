@@ -108,3 +108,7 @@ npm-debug.log*
 *.mv.db
 *.trace.db
 *.lock.db
+
+# Local Node toolchain dropped by optional Maven builds
+web/.tools/
+web/.npm/
